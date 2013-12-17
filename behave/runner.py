@@ -254,7 +254,7 @@ class Context(object):
                 return True
         return False
 
-    def execute_steps(self, steps_text):
+    def execute_steps(self, steps_text, forward_table=False):
         '''The steps identified in the "steps" text string will be parsed and
         executed in turn just as though they were defined in a feature file.
 
@@ -277,6 +277,8 @@ class Context(object):
         self.feature.parser.variant = 'steps'
         steps = self.feature.parser.parse_steps(steps_text)
         for step in steps:
+            if forward_table:
+                step.table = self.table
             passed = step.run(self._runner, quiet=True, capture=False)
             if not passed:
                 # -- ISSUE #96: Provide more substep info to diagnose problem.
