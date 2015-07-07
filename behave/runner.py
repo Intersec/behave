@@ -278,7 +278,7 @@ class Context(object):
         steps = self.feature.parser.parse_steps(steps_text)
         for step in steps:
             if forward_table:
-                step.table = self.table
+                step.table = original_table
             passed = step.run(self._runner, quiet=True, capture=False)
             if not passed:
                 # -- ISSUE #96: Provide more substep info to diagnose problem.
