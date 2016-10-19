@@ -70,6 +70,7 @@ class TestSummaryReporter(object):
         features[3].__iter__ = Mock(return_value=iter([]))
 
         config = Mock()
+        config.order = ('defined', None)
         reporter = SummaryReporter(config)
 
         [reporter.feature(f) for f in features]
@@ -105,6 +106,7 @@ class TestSummaryReporter(object):
         features[4].__iter__ = Mock(return_value=iter([]))
 
         config = Mock()
+        config.order = ('defined', None)
         reporter = SummaryReporter(config)
 
         [reporter.feature(f) for f in features]
@@ -140,6 +142,7 @@ class TestSummaryReporter(object):
         feature.__iter__ = Mock(return_value=iter(scenarios))
 
         config = Mock()
+        config.order = ('defined', None)
         reporter = SummaryReporter(config)
 
         reporter.feature(feature)
@@ -182,6 +185,7 @@ class TestSummaryReporter(object):
         feature.__iter__ = Mock(return_value=iter(scenarios))
 
         config = Mock()
+        config.order = ('defined', None)
         reporter = SummaryReporter(config)
 
         reporter.feature(feature)
@@ -220,6 +224,7 @@ class TestSummaryReporter(object):
         scenario.__iter__ = Mock(return_value=iter(steps))
 
         config = Mock()
+        config.order = ('defined', None)
         reporter = SummaryReporter(config)
 
         reporter.feature(feature)

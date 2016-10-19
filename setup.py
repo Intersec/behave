@@ -99,5 +99,3 @@ setup(
     ],
     zip_safe = True,
 )
-
-

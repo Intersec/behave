@@ -14,8 +14,8 @@ from behave.step_registry import setup_step_decorators
 from behave.formatter import formatters
 from behave.configuration import ConfigError
 from behave.log_capture import LoggingCapture
-from behave.runner_util import \
-    collect_feature_locations, parse_features
+from behave.runner_util import collect_feature_locations, parse_features
+from behave.model import order_list_by_config
 
 
 class ContextMaskWarning(UserWarning):
@@ -473,6 +473,9 @@ class ModelRunner(object):
         run_feature = not self.aborted
         failed_count = 0
         undefined_steps_initial_size = len(self.undefined_steps)
+
+        order_list_by_config(self.config, features)
+
         for feature in features:
             if run_feature:
                 try:

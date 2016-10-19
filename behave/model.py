@@ -6,6 +6,7 @@ import difflib
 import itertools
 import os.path
 import sys
+import random
 import time
 import traceback
 from behave import step_registry
@@ -437,6 +438,8 @@ class Feature(TagAndStatusStatement, Replayable):
         if run_feature or runner.config.show_skipped:
             for formatter in runner.formatters:
                 formatter.feature(self)
+
+        order_list_by_config(runner.config, self.scenarios)
 
         # current tags as a set
         runner.context.tags = set(self.tags)
@@ -1623,3 +1626,12 @@ def reset_model(model_elements):
     """
     for model_element in model_elements:
         model_element.reset()
+
+
+def order_list_by_config(config, iterable):
+    order_type, seed = config.order
+    if order_type != "random":
+        return iterable
+    r = random.Random(seed)
+    r.shuffle(iterable)
+    return iterable

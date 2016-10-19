@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import random
 import re
 import sys
 import argparse
@@ -287,6 +288,10 @@ options = [
      dict(action='store_true',
           help='Show the files and features loaded.')),
 
+    (("--order",),
+     dict(dest="order", metavar="TYPE[:SEED]",
+          help="""Change the order in which the scenarios are run.""")),
+
     (('-w', '--wip'),
      dict(action='store_true',
           help="""Only run scenarios tagged with "wip". Additionally: use the
@@ -437,6 +442,7 @@ class Configuration(object):
         logging_format='%(levelname)s:%(name)s:%(message)s',
         logging_level=logging.INFO,
         summary=True,
+        order="defined",
         junit=False,
         # -- SPECIAL:
         default_format="pretty",   # -- Used when no formatters are configured.
@@ -507,6 +513,23 @@ class Configuration(object):
             self.stdout_capture = False
 
         self.tags = TagExpression(self.tags or [])
+
+        if self.order:
+            order_type = self.order
+            seed = None
+            if ":" in self.order:
+                order_type, seed = self.order.split(":", 1)
+            if order_type not in ("defined", "random"):
+                parser.error('order_type "%s" not implemented' % order_type)
+
+            try:
+                seed = int(seed)
+            except (ValueError, TypeError):
+                if order_type == "random":
+                    seed = random.randint(0, 100000)
+                else:
+                    seed = None
+            self.order = (order_type, seed)
 
         if self.quiet:
             self.show_source = False
