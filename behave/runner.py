@@ -272,13 +272,14 @@ class Context(object):
         # -- PREPARE: Save original context data for current step.
         # Needed if step definition that called this method uses .table/.text
         original_table = getattr(self, "table", None)
-        original_text  = getattr(self, "text", None)
+        original_text = getattr(self, "text", None)
 
         self.feature.parser.variant = 'steps'
         steps = self.feature.parser.parse_steps(steps_text)
         for step in steps:
             if forward_table:
                 step.table = original_table
+                step.text = original_text
             passed = step.run(self._runner, quiet=True, capture=False)
             if not passed:
                 # -- ISSUE #96: Provide more substep info to diagnose problem.
@@ -290,7 +291,7 @@ class Context(object):
 
         # -- FINALLY: Restore original context data for current step.
         self.table = original_table
-        self.text  = original_text
+        self.text = original_text
         return True
 
 
